@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Map of Italy with Custom Pins</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <style>
+        #map { height: 500px; width: 100%; }
+        #controls { margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <div id="controls">
+        <button id="addPin">Add Pin</button>
+        <button id="savePins">Save Pins</button>
+        <button id="loadPins">Load Pins</button>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script>
+        // Initialize the map centered on Italy
+        var map = L.map('map').setView([42.8333, 12.8333], 6);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
+        }).addTo(map);
+
+        var pins = [];
+
+        function addPin(latlng, popupContent) {
+            var marker = L.marker(latlng).addTo(map);
+            if (popupContent) {
+                marker.bindPopup(popupContent);
+            } else {
+                marker.bindPopup("Custom Pin");
+            }
+            pins.push({lat: latlng.lat, lng: latlng.lng, content: popupContent || "Custom Pin"});
+        }
+
+        document.getElementById('addPin').addEventListener('click', function() {
+            map.once('click', function(e) {
+                var content = prompt("Enter description for this pin:", "Custom Pin");
+                addPin(e.latlng, content);
+            });
+        });
+
+        document.getElementById('savePins').addEventListener('click', function() {
+            localStorage.setItem('mapPins', JSON.stringify(pins));
+            alert('Pins saved!');
+        });
+
+        document.getElementById('loadPins').addEventListener('click', function() {
+            var savedPins = JSON.parse(localStorage.getItem('mapPins') || '[]');
+            pins = savedPins;
+            map.eachLayer(function(layer) {
+                if (layer instanceof L.Marker) {
+                    map.removeLayer(layer);
+                }
+            });
+            savedPins.forEach(function(pin) {
+                addPin(L.latLng(pin.lat, pin.lng), pin.content);
+            });
+            alert('Pins loaded!');
+        });
+
+        // Add a default marker for Rome
+        addPin(L.latLng(41.9028, 12.4964), "Rome, the capital of Italy");
+    </script>
+</body>
+</html>
