@@ -8,8 +8,9 @@ error_reporting(E_ALL);
 header('Content-Type: application/json');
 
 // Database connection
-require 'cred.php';
+require 'config.php';
 
+$conn = new mysqli($HOST, $USER, $PWD, $DB);
 if ($conn->connect_error) {
     die(json_encode(['status' => 'error', 'message' => 'Database connection failed: ' . $conn->connect_error]));
 }
