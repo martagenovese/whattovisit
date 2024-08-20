@@ -8,7 +8,8 @@ error_reporting(E_ALL);
 header('Content-Type: application/json');
 
 // Database connection
-$conn = new mysqli('localhost', 'bot', 'Password.123', 'whattovisit');
+require 'cred.php';
+
 if ($conn->connect_error) {
     die(json_encode(['status' => 'error', 'message' => 'Database connection failed: ' . $conn->connect_error]));
 }
