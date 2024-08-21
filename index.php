@@ -8,7 +8,7 @@ error_reporting(E_ALL);
 header('Content-Type: application/json');
 
 // Database connection
-require 'config.php';
+require 'conf.php';
 
 $conn = new mysqli($HOST, $USER, $PWD, $DB);
 if ($conn->connect_error) {

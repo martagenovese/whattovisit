@@ -8,19 +8,21 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 var pins = [];
 
-async function addPin(latlng, popupContent) {    
+async function addPin(latlng, popupContent) {
     try {
-      // Send the pin to the server with lon, lat, content
-
       const formData = new FormData();
+      formData.append('action', 'addPin');
       formData.append('lat', latlng.lat);
       formData.append('lon', latlng.lng);
+      formData.append('title', popupContent);
       formData.append('content', popupContent);
 
       const response = await fetch('http://192.168.1.68/manage_pins.php', {
           method: 'POST',
           body: formData
-      });
+      })
+
+      const resultText = await response.text();
 
       try {
           const result = JSON.parse(resultText);
@@ -53,19 +55,27 @@ document.getElementById('addPin').addEventListener('click', function() {
     });
 });
 
-document.getElementById('loadPins').addEventListener('click', function() {
+document.addEventListener('DOMContentLoaded', function() {
     var savedPins = JSON.parse(localStorage.getItem('mapPins') || '[]');
     pins = savedPins;
-    map.eachLayer(function(layer) {
-        if (layer instanceof L.Marker) {
-            map.removeLayer(layer);
-        }
-    });
     savedPins.forEach(function(pin) {
-        addPin(L.latLng(pin.lat, pin.lng), pin.content);
+      // Add the pin to the map
+      var marker = L.marker(L.latLng(pin.lat, pin.lng)).addTo(map);
+      if (pin.content) {
+          marker.bindPopup(pin.content);
+      } else {
+          marker.bindPopup("Custom Pin");
+      }
     });
-    alert('Pins loaded!');
 });
 
+function displayMessage(result, elementId) {
+  const messageDiv = document.getElementById(elementId);
+  if (messageDiv) {
+      messageDiv.textContent = result.message;
+      messageDiv.style.color = result.status === 'success' ? 'green' : 'red';
+  }
+}
+
 // Add a default marker for Rome
-addPin(L.latLng(41.9028, 12.4964), "Rome, the capital of Italy");
+//addPin(L.latLng(41.9028, 12.4964), "Rome, the capital of Italy");
