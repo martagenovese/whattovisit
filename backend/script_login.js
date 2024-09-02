@@ -17,7 +17,7 @@ async function handleFormSubmitLogin(event) {
     const formData = new FormData(event.target);
 
     try {
-        const response = await fetch('http://192.168.1.68/index.php', {
+        const response = await fetch('https://iknowaspot.martagenovese.com/backend/index.php', {
             method: 'POST',
             body: formData
         });
@@ -27,7 +27,7 @@ async function handleFormSubmitLogin(event) {
         try {
             const result = JSON.parse(resultText);
             if (result.status === 'success') {
-                window.location.href = 'start.html'; // Redirect on success
+                window.location.href = 'frontend/start.html'; // Redirect on success
             } else {
                 displayMessage(result, 'loginMessage');
             }
@@ -48,7 +48,7 @@ async function handleFormSubmitRegister(event) {
     const formData = new FormData(event.target);
 
     try {
-        const response = await fetch('http://192.168.1.68/index.php', {
+        const response = await fetch('https://iknowaspot.martagenovese.com/backend/index.php', {
             method: 'POST',
             body: formData
         });
@@ -58,7 +58,7 @@ async function handleFormSubmitRegister(event) {
         try {
             const result = JSON.parse(resultText);
             if (result.status === 'success') {
-                window.location.href = 'start.html'; // Redirect on success
+                window.location.href = 'frontend/start.html'; // Redirect on success
             } else {
                 displayMessage(result, 'registerMessage');
             }

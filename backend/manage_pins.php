@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Insert the pin into the database
-    $stmt = $conn->prepare("SELECT pinID FROM pins WHERE lat = ? AND lon = ?");
+    $stmt = $conn->prepare("SELECT placeID FROM places WHERE lat = ? AND lon = ?");
     $stmt->bind_param('dd', $lat, $lon);
     $stmt->execute();
     $stmt->store_result();
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     $stmt->close();
 
-    $stmt = $conn->prepare("INSERT INTO pins (lat, lon, title, description) VALUES (?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO places (lat, lon, title, description) VALUES (?, ?, ?, ?)");
     $stmt->bind_param('ddss', $lat, $lon, $title, $description);
     
     if ($stmt->execute()) {

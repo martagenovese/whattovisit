@@ -17,7 +17,7 @@ async function addPin(latlng, popupContent) {
       formData.append('title', popupContent);
       formData.append('content', popupContent);
 
-      const response = await fetch('http://192.168.1.68/manage_pins.php', {
+      const response = await fetch('https://iknowaspot.martagenovese.com/backend/manage_pins.php', {
           method: 'POST',
           body: formData
       })

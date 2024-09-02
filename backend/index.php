@@ -6,6 +6,10 @@ error_reporting(E_ALL);
 
 // Set Content-Type header to JSON
 header('Content-Type: application/json');
+header("Access-Control-Allow-Origin: https://iknowaspot.martagenovese.com");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Credentials: true");
 
 // Database connection
 require 'conf.php';
