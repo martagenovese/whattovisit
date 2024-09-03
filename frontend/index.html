@@ -59,11 +59,11 @@
 
                     const result = await response.json();
                     if (result.status !== 'success') {
-                        window.location.href = 'login.html';
+                        window.location.href = 'https://iknowaspot.martagenovese.com/frontend/login.html';
                     }
                 } catch (error) {
                     console.error('Error checking login status:', error);
-                    window.location.href = 'login.html';
+                    window.location.href = 'https://iknowaspot.martagenovese.com/frontend/login.html';
                 }
             }
             checkLoginStatus();
