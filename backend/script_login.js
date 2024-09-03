@@ -3,14 +3,17 @@ document.addEventListener('DOMContentLoaded', function() {
     const registerForm = document.getElementById('registerForm');
 
     if (loginForm) {
-        loginForm.addEventListener('submit', handleFormSubmit('loginForm'));
+        loginForm.addEventListener('submit', function(event) {
+            handleFormSubmit(event, 'loginForm');
+        });
     }
 
     if (registerForm) {
-        registerForm.addEventListener('submit', handleFormSubmit('registerForm'));
+        registerForm.addEventListener('submit', function(event) {
+            handleFormSubmit(event, 'registerForm');
+        });
     }
 });
-
 
 async function handleFormSubmit(event, formId) {
     event.preventDefault();
@@ -30,19 +33,18 @@ async function handleFormSubmit(event, formId) {
             if (result.status === 'success') {
                 window.location.href = 'frontend/start.html'; // Redirect on success
             } else {
-                displayMessage(result, 'registerMessage');
+                displayMessage(result, formId + 'Message');
             }
         } catch (jsonError) {
             console.error('Error parsing JSON:', jsonError);
             console.error('Raw Response:', resultText);
-            displayMessage({ status: 'error', message: 'Invalid response from server.' }, formId);
+            displayMessage({ status: 'error', message: 'Invalid response from server.' }, formId + 'Message');
         }
     } catch (error) {
         console.error('Error:', error);
-        displayMessage({ status: 'error', message: 'An unexpected error occurred.' }, formId);
+        displayMessage({ status: 'error', message: 'An unexpected error occurred.' }, formId + 'Message');
     }
 }
-
 
 function displayMessage(result, elementId) {
     const messageDiv = document.getElementById(elementId);
