@@ -28,7 +28,7 @@ async function handleFormSubmit(event, formId) {
             const result = JSON.parse(resultText);
             if (result.status === 'success') {
                 localStorage.setItem('isLoggedIn', 'true');
-                window.location.href = 'frontend/start.html';
+                window.location.href = '../frontend/start.html';
             } else {
                 displayMessage(result, formId);
             }
@@ -47,7 +47,7 @@ function checkLoginStatus() {
     const isLoggedIn = localStorage.getItem('isLoggedIn');
 
     if (!isLoggedIn) {
-        window.location.href = 'frontend/login.html';
+        window.location.href = '../frontend/login.html';
     }
 }
 
