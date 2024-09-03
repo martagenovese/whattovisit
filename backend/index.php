@@ -1,4 +1,7 @@
 <?php
+// Start or resume a session
+session_start();
+
 // Enable error reporting for debugging
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
@@ -23,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'register') {
+        // Registration logic
         $firstName = $_POST['firstName'] ?? '';
         $lastName = $_POST['lastName'] ?? '';
         $email = $_POST['email'] ?? '';
@@ -60,6 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param('ssss', $firstName, $lastName, $email, $hashedPassword);
 
         if ($stmt->execute()) {
+            // Set session variable to indicate user is logged in
+            $_SESSION['user'] = $email;
             $response = ['status' => 'success', 'message' => 'Registration successful!'];
         } else {
             $response = ['status' => 'error', 'message' => 'Registration failed. Please try again.'];
@@ -70,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
 
     } elseif ($action === 'login') {
+        // Login logic
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
         
@@ -89,6 +96,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_result($userId, $hashedPassword);
             $stmt->fetch();
             if (password_verify($password, $hashedPassword)) {
+                // Set session variable to indicate user is logged in
+                $_SESSION['user'] = $email;
                 $response = ['status' => 'success', 'message' => 'Login successful!'];
             } else {
                 $response = ['status' => 'error', 'message' => 'Incorrect password.'];
