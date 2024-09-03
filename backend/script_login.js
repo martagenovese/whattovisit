@@ -47,7 +47,7 @@ function checkLoginStatus() {
     const isLoggedIn = localStorage.getItem('isLoggedIn');
 
     if (!isLoggedIn) {
-        window.location.href = '../frontend/login.html';
+        window.location.href = '../frontend/index.html';
     }
 }
 
