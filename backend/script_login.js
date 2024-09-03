@@ -23,15 +23,14 @@ async function handleFormSubmit(event, formId) {
         const response = await fetch('https://iknowaspot.martagenovese.com/backend/index.php', {
             method: 'POST',
             body: formData,
-            credentials: 'include' // Include credentials for session management
+            credentials: 'include' 
         });
 
         const resultText = await response.text();
-
         try {
             const result = JSON.parse(resultText);
             if (result.status === 'success') {
-                window.location.href = '../frontend/start.php'; // Redirect to PHP-protected page
+                window.location.href = '../frontend/index.html';
             } else {
                 displayMessage(result, 'registerMessage');
             }
