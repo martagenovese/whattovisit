@@ -8,17 +8,13 @@ error_reporting(E_ALL);
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-// Database connection
 require 'conf.php';
-
 $conn = new mysqli($HOST, $USER, $PWD, $DB);
 if ($conn->connect_error) {
     die(json_encode(['status' => 'error', 'message' => 'Database connection failed: ' . $conn->connect_error]));
 }
 
-// Initialize response array
 $response = [];
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
@@ -67,7 +63,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    // Load all existing places from the database
     $stmt = $conn->prepare("SELECT lat, lon, title, description FROM places");
     $stmt->execute();
     $result = $stmt->get_result();
@@ -88,6 +83,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-// Close the database connection
 $conn->close();
 ?>

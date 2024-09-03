@@ -6,9 +6,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap contributors</a>'
 }).addTo(map);
 
-var pins = [];
 
-// Function to load all pins from the server
 async function loadPins() {
     try {
         const response = await fetch('https://iknowaspot.martagenovese.com/backend/manage_pins.php', {
@@ -40,7 +38,6 @@ async function loadPins() {
     }
 }
 
-// Function to add a pin to the map and save it to the server
 async function addPin(latlng, popupContent) {
     try {
         const formData = new FormData();
@@ -81,7 +78,8 @@ async function addPin(latlng, popupContent) {
     }
 }
 
-// Add event listener for adding a new pin
+
+
 document.getElementById('addPin').addEventListener('click', function() {
     map.once('click', function(e) {
         var content = prompt("Enter description for this pin:", "Custom Pin");
@@ -90,12 +88,9 @@ document.getElementById('addPin').addEventListener('click', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    loadPins();  // Load all pins from the server on page load
-
+    loadPins();
     var savedPins = JSON.parse(localStorage.getItem('mapPins') || '[]');
-    pins = savedPins;
     savedPins.forEach(function(pin) {
-        // Add the pin to the map
         var marker = L.marker(L.latLng(pin.lat, pin.lng)).addTo(map);
         if (pin.content) {
             marker.bindPopup(pin.content);

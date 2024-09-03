@@ -11,29 +11,24 @@ header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Credentials: true");
 
-// Database connection
 require 'conf.php';
-
 $conn = new mysqli($HOST, $USER, $PWD, $DB);
 if ($conn->connect_error) {
     die(json_encode(['status' => 'error', 'message' => 'Database connection failed: ' . $conn->connect_error]));
 }
 
-// Initialize response array
 $response = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
 
     if ($action === 'register') {
-        // Handle registration
         $firstName = $_POST['firstName'] ?? '';
         $lastName = $_POST['lastName'] ?? '';
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
         $confirmPassword = $_POST['confirmPassword'] ?? '';
 
-        // Basic validation
         if (empty($firstName) || empty($lastName) || empty($email) || empty($password) || empty($confirmPassword)) {
             $response = ['status' => 'error', 'message' => 'All fields are required.'];
             echo json_encode($response);
@@ -60,10 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         $stmt->close();
 
-        // Hash the password before storing it
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-        // Insert the new user into the database
         $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, email, password) VALUES (?, ?, ?, ?)");
         $stmt->bind_param('ssss', $firstName, $lastName, $email, $hashedPassword);
 
@@ -78,11 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
 
     } elseif ($action === 'login') {
-        // Handle login
         $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
-
-        // Basic validation
+        
         if (empty($email) || empty($password)) {
             $response = ['status' => 'error', 'message' => 'Email and password are required.'];
             echo json_encode($response);
@@ -98,7 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->num_rows > 0) {
             $stmt->bind_result($userId, $hashedPassword);
             $stmt->fetch();
-
             if (password_verify($password, $hashedPassword)) {
                 $response = ['status' => 'success', 'message' => 'Login successful!'];
             } else {
@@ -113,18 +102,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
 
     } else {
-        // Invalid action
         $response = ['status' => 'error', 'message' => 'Invalid action.'];
         echo json_encode($response);
         exit;
     }
 } else {
-    // Invalid request method
     $response = ['status' => 'error', 'message' => 'Invalid request method.'];
     echo json_encode($response);
     exit;
 }
 
-// Close the database connection
 $conn->close();
 ?>
